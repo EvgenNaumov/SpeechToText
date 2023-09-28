@@ -10,9 +10,9 @@ object Config{
 
     const val application_id = "com.naumov.speechtotext"
     const val compile_sdk = 33
-    const val min_sdk  = 26
+    const val min_sdk  = 29
     const val target_sdk = 33
-    var java_version = JavaVersion.VERSION_11
+    var java_version = org.gradle.api.JavaVersion.VERSION_11
     const val jvmTarget = "11"
 
 }
@@ -28,7 +28,7 @@ object Modules{
     const val core = ":core"
     const val model = ":model"
     const val repository = ":repository"
-    const val utils = "^utils"
+    const val utils = ":utils"
 }
 
 object Version{
@@ -49,7 +49,7 @@ object Version{
     const val adapterCoroutines = "0.9.2"
 
     //Koin
-    const val koin = "3.4.0"
+    const val koin = "3.4.3"
     const val koinViewModel = "android.arch.core:core:1.0.0-alpha3.4.0"
 
     //Room
@@ -65,7 +65,7 @@ object Version{
 }
 
 object Design{
-    const val appcomp = "com.android.support:appcompat:${Version.appcompat}"
+    const val appcomp = "androidx.appcompat:appcompat:${Version.appcompat}"
     const val material = "com.google.android.material:material:${Version.material}"
 }
 
