@@ -3,14 +3,13 @@ package com.naumov.mytestapp.common.media
 import android.media.AudioManager
 import android.media.AudioRecordingConfiguration
 import android.media.MediaRecorder
-import android.os.AsyncTask
 import android.os.Build
 import android.provider.MediaStore.Audio
 import android.util.Log
 import android.widget.Toast
 import com.naumov.mytestapp.App
 import com.naumov.mytestapp.utils.DEBUG_ON
-import com.naumov.mytestapp.utils.DEBUG_TAG
+import com.naumov.mytestapp.utils.TAG
 import java.io.File
 import java.io.IOException
 import java.util.concurrent.Executor
@@ -48,11 +47,11 @@ class AudioRecord {
                     prepare()
 
                 } catch (e: IllegalStateException) {
-                    Log.d(DEBUG_TAG, "IllegalStateException preparing MediaRecorder: " + e.message);
+                    Log.d(TAG, "IllegalStateException preparing MediaRecorder: " + e.message);
                     releaseMediaRecorder();
                     return false;
                 } catch (e: IOException) {
-                    Log.d(DEBUG_TAG, "IOException preparing MediaRecorder: " + e.message);
+                    Log.d(TAG, "IOException preparing MediaRecorder: " + e.message);
                     releaseMediaRecorder();
                     return false;
                 }
@@ -92,7 +91,7 @@ class AudioRecord {
                 mediaRecorder?.stop()
             } catch (e: java.lang.RuntimeException) {
                 if (DEBUG_ON) {
-                    Log.d(DEBUG_TAG, "RuntimeException: stop() is called immediately after start()")
+                    Log.d(TAG, "RuntimeException: stop() is called immediately after start()")
                     fileOutput.delete()
                 }
             }

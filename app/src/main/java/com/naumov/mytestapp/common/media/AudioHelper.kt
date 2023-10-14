@@ -1,13 +1,8 @@
 package com.naumov.mytestapp.common.media
 
 import android.annotation.SuppressLint
-import android.media.MediaRecorder
-import android.os.Build
-import android.os.Build.VERSION
 import android.os.Environment
 import android.util.Log
-import com.naumov.mytestapp.App
-import com.naumov.mytestapp.BuildConfig
 import com.naumov.mytestapp.utils.*
 import java.io.File
 import java.text.SimpleDateFormat
@@ -32,7 +27,7 @@ class AudioHelper {
             if (!mediaStorageDir.exists()) {
                 if (!mediaStorageDir.mkdir()) {
                     if (DEBUG_ON) {
-                        Log.d(DEBUG_TAG, "getOutputMediaFile: error mkdir ${DIR_AUDIO_SAMPLE}")
+                        Log.d(TAG, "getOutputMediaFile: error mkdir ${DIR_AUDIO_SAMPLE}")
                         return null
                     }
                 }

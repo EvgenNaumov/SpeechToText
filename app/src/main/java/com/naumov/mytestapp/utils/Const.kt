@@ -1,11 +1,10 @@
 package com.naumov.mytestapp.utils
 
-import android.os.Build
 import com.naumov.mytestapp.BuildConfig
 
 const val DEBUG_TAG_NETWORK = "NetworkStatus"
 const val KEY_PREFER = "KeyPref"
-const val DEBUG_TAG = "DEBUG_TAG"
+const val TAG = "DEBUG_TAG"
 var DEBUG_ON = BuildConfig.BUILD_TYPE == "debug"
 
 const val REQUEST_CODE_WRITE_EXT_STORAGE = 12

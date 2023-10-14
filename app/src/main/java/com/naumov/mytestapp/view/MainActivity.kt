@@ -1,15 +1,17 @@
 package com.naumov.mytestapp.view
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import android.widget.Toast.LENGTH_SHORT
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -18,13 +20,18 @@ import com.naumov.mytestapp.App
 import com.naumov.mytestapp.R
 import com.naumov.mytestapp.core.CheckPermissionDescription
 import com.naumov.mytestapp.databinding.ActivityMainBinding
+import com.naumov.mytestapp.model.ViewStateData
 import com.naumov.mytestapp.network.ManagerNetworkConnect
+import com.naumov.mytestapp.utils.DEBUG_ON
+import com.naumov.mytestapp.utils.TAG
+import com.naumov.mytestapp.viewmodel.DataViewModel
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
 
+    private lateinit var viewModel: DataViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,22 +53,56 @@ class MainActivity : AppCompatActivity() {
 
         App.instanceNet.setRegisterStatusNetwork()
 
+        initialViewModel()
 
-        binding.fab.setOnClickListener { view ->
-//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                .setAction("Action", null).show()
-
-            Toast.makeText(
-                this,
-                "Connect is ${
-                    ManagerNetworkConnect.instanceNet(App.cont).getStatusCurrentNetwork()
-                }",
-                Toast.LENGTH_SHORT
-            ).show()
+        binding.fab.setOnLongClickListener {
+            if (!ManagerNetworkConnect.instanceNet(App.cont)
+                    .getStatusCurrentNetwork()
+            ) {
+                Toast.makeText(this, "not connect",LENGTH_SHORT ).show()
+                return@setOnLongClickListener false
+            }
+            viewModel.onPressButtonRecord()
 
         }
 
 
+    }
+
+    private fun initialViewModel() {
+        val model:DataViewModel  by lazy{ViewModelProvider(this)[DataViewModel::class.java]}
+        viewModel = model
+        viewModel.subscribe().observe(this@MainActivity){renderData(it)}
+    }
+
+    fun renderData(dataTranslate:ViewStateData){
+        when (dataTranslate){
+            is ViewStateData.Loading->{
+                if (DEBUG_ON){
+                    Log.d(TAG, "renderData: Loading")
+                }
+                showLoading(true)
+            }
+          is ViewStateData.Success->{
+              if (DEBUG_ON){
+                  Log.d(TAG, "renderData: Success")
+              }
+              showLoading(false)
+              showMessBox(dataTranslate.resultSpeech?._result)
+          }
+            else -> {
+
+            }
+        }
+    }
+
+    private fun showMessBox(_result: String?) {
+
+
+    }
+
+    private fun showLoading(isLoading:Boolean) {
+        TODO("Not yet implemented")
     }
 
     private fun checkPermission(permissionString: String) {

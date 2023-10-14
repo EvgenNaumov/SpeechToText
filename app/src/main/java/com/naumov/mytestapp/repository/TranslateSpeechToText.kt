@@ -5,13 +5,13 @@ import java.io.File
 
 interface TranslateSpeechToText {
 
-    fun getTextFromSpeechOutFlow():Flow<String>
+    suspend fun getTextFromSpeechOutFlow():Flow<String>
 
-    fun getTextFromSpeechAudioFile(fileAudio:File):Flow<String>
+    suspend fun getTextFromSpeechAudioFile(fileAudio:File):Flow<String>
 
-    fun getTextFromSpeechAudioFileSynch(fileAudio:File):Flow<String>
+    suspend fun getTextFromSpeechAudioFileSynch(fileAudio:File):Flow<String>
 
-    fun getTextFromSpeechAudioFileAsynch(fileAudio:File):Flow<String>
+    suspend fun getTextFromSpeechAudioFileAsynch(fileAudio:File):Flow<String>
 
-    fun getFakeText():Flow<String>
+    suspend fun getFakeText():Flow<String>
 }
