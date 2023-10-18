@@ -1,3 +1,24 @@
 <resources>
-    <string name="app_name">SpeechToText</string>
+    <string name="app_name">My Test App</string>
+    <string name="action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="text_fake_metod_translate">Это текст пробный для тестирования</string>
+    <string name="alert_write_ext_storage_title">Доступ к внешнему накопителю</string>
+    <string name="alert_write_ext_storage_request">Запрос на запись во внешнее хранилище. При отказе расшифровка аудио сообщения будет недоступна</string>
+    <string name="alert_read_ext_storage_request">Запрос на чтение с внешнего хранилище. При отказе расшифровка аудио сообщения будет недоступна</string>
+    <string name="open_permission_settings">Открыть доступ</string>
+    <string name="close_permission_settings">Отказать в доступе</string>
+    <string name="alert_read_ext_storage_title">Запрос на доступ чтения.</string>
+    <string name="alert_read_media_audio_title">Доступ к микрофону.</string>
+    <string name="alert_read_media_audio_message">Требуется достп к микрофону, иначе расшифровка сообщений не будет работать</string>
+    <string name="alertdialog_title_stub">Attention</string>
+    <string name="dialog_button_cancel">Cancel</string>
+    <string name="save_audio_file">save audio file</string>
 </resources>
