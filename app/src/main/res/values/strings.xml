@@ -18,4 +18,7 @@
     <string name="alert_read_ext_storage_title">Запрос на доступ чтения.</string>
     <string name="alert_read_media_audio_title">Доступ к микрофону.</string>
     <string name="alert_read_media_audio_message">Требуется достп к микрофону, иначе расшифровка сообщений не будет работать</string>
+    <string name="alertdialog_title_stub">Attention</string>
+    <string name="dialog_button_cancel">Cancel</string>
+    <string name="save_audio_file">save audio file</string>
 </resources>

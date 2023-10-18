@@ -22,6 +22,22 @@ class AudioRecord {
 
     private var isRecording = false
 
+
+    private var onErrorListenerMediaRecord = object : MediaRecorder.OnErrorListener {
+        override fun onError(mr: MediaRecorder?, what: Int, extra: Int) {
+
+        }
+    }
+
+    private var CallbaclAudioRecord = object : Executor {
+        override fun execute(command: Runnable?) {
+            command.run {
+
+            }
+        }
+    }
+
+
     fun prepareMediaRecorder(): Boolean {
 
         val file = AudioHelper.getInstance().getOutputMediaFile {
@@ -35,13 +51,18 @@ class AudioRecord {
                 setOutputFile(file)
                 setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
                 //регистрация callback
-                registerAudioRecordingCallback(CallbaclAudioRecord(), object : AudioManager.AudioRecordingCallback() {
-                    override fun onRecordingConfigChanged(configs: MutableList<AudioRecordingConfiguration>?) {
-                        super.onRecordingConfigChanged(configs)
+                registerAudioRecordingCallback(
+                    CallbaclAudioRecord,
+                    object : AudioManager.AudioRecordingCallback() {
+                        override fun onRecordingConfigChanged(configs: MutableList<AudioRecordingConfiguration>?) {
+                            super.onRecordingConfigChanged(configs)
 
-                    }
-                })
-                setOnErrorListener(onErrorListenerMediaRecord())
+                        }
+
+                    })
+                setOnErrorListener(onErrorListenerMediaRecord)
+
+
                 //регистрация callback
                 try {
                     prepare()
@@ -69,49 +90,53 @@ class AudioRecord {
         }
     }
 
-    fun startRecord() {
+    fun startRecord(
+        errorFile: (err: Throwable) -> Unit
+    ) {
         if (!prepareMediaRecorder()) {
             releaseMediaRecorder()
-            return
         }
 
-        Thread() {
+        Thread {
 
-            mediaRecorder?.start()
-            isRecording = true
+            try {
+                mediaRecorder?.start()
+                isRecording = true
+            } catch (e: java.lang.IllegalStateException) {
+                errorFile.invoke(e)
+                releaseMediaRecorder()
+                isRecording = !isRecording
+            }
 
         }.start()
 
     }
 
-    fun stopRecord() {
+    fun stopRecord(errorFile: (err: Throwable) -> Unit): File? {
+        if (mediaRecorder == null) {
+            return null
+        }
         if (isRecording) {
 
             try {
-                mediaRecorder?.stop()
+                mediaRecorder!!.stop()
+                return fileOutput
             } catch (e: java.lang.RuntimeException) {
                 if (DEBUG_ON) {
                     Log.d(TAG, "RuntimeException: stop() is called immediately after start()")
                     fileOutput.delete()
                 }
+                errorFile.invoke(e)
+            } finally {
+                isRecording = !isRecording
             }
-
             releaseMediaRecorder()
-        }
-    }
-
-    inner class CallbaclAudioRecord : Executor {
-        override fun execute(command: Runnable?) {
-            command.run {
-
-            }
-        }
-    }
-
-    inner class onErrorListenerMediaRecord: MediaRecorder.OnErrorListener {
-        override fun onError(mr: MediaRecorder?, what: Int, extra: Int) {
+            return null
 
         }
+
+        return null
     }
+
 
 }

@@ -11,6 +11,8 @@ import com.naumov.mytestapp.repository.TranslateSpeechToTextImpl
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import java.io.File
 
 class DataViewModel(private val translateSpeechToText: TranslateSpeechToText = TranslateSpeechToTextImpl()) :
     ViewModel() {
@@ -21,33 +23,40 @@ class DataViewModel(private val translateSpeechToText: TranslateSpeechToText = T
     private val _mutabelData = MutableLiveData<ViewStateData>()
     val mutabelData = _mutabelData
 
-    val audioRecord:AudioRecord = AudioRecord()
 
     private val coroutineScoupe = CoroutineScope(
         SupervisorJob() +
                 CoroutineExceptionHandler { _, throwable ->
-                    handleError(throwable)}
+                    handleError(throwable)
+                }
     )
+
     private fun handleError(throwable: Throwable) {
         _mutabelData.postValue(ViewStateData.ErrorService(throwable))
     }
 
-    fun subscribe():LiveData<ViewStateData> = mutabelData
+    fun subscribe(): LiveData<ViewStateData> = mutabelData
 
     private fun getTranslate() {
         cancelJob()
         _mutabelData.postValue(ViewStateData.Loading)
-        coroutineScoupe.launch { translateSpeechToText.getFakeText().map { convertToSpeechData(it) }}
+        coroutineScoupe.launch {
+            startInteractor()
+        }
     }
 
-    private fun convertToSpeechData(it: String):SpeechData {
-           return SpeechData(it)
-    }
 
-    fun onPressButtonRecord():Boolean {
+    suspend fun startInteractor() =
+        withContext(Dispatchers.IO) {
 
-       audioRecord.startRecord()
-       return true
+            translateSpeechToText.getFakeText()
+                .collect { _mutabelData.postValue(ViewStateData.Success(SpeechData(it))) }
+        }
+
+    fun onPressButtonRecord(): Boolean {
+
+        getTranslate()
+        return true
     }
 
     override fun onCleared() {
