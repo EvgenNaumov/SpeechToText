@@ -20,26 +20,21 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/content_main" />
+    <include
+        android:id="@+id/content_progress_bar_save_file"
+        layout="@layout/content_progress_bar" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layout_action_load_save"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <fragment
-            android:id="@+id/action_load_save"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:name="com.naumov.mytestapp.view.IndicatorFragment"
-            tools:layout="@layout/fragment_indicator" />
+        <include layout="@layout/content_main" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
+    <include
+        android:id="@+id/layout_sheet_result"
+        layout="@layout/content_result" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
@@ -48,8 +43,21 @@
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="16dp"
+        android:contentDescription="@string/save_audio_file"
         android:longClickable="true"
-        app:srcCompat="@android:drawable/ic_dialog_email"
-        android:contentDescription="@string/save_audio_file"/>
+        app:layout_anchor="@id/layout_sheet_result"
+        app:layout_anchorGravity="end|top|center_vertical"
+        app:srcCompat="@android:drawable/ic_dialog_email" />
+
+
+    <!--    <com.google.android.material.bottomappbar.BottomAppBar-->
+    <!--        android:id="@+id/bottom_app_bar"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_gravity="bottom"-->
+    <!--        app:backgroundTint="?colorPrimary"-->
+    <!--        app:fabAlignmentMode="center"-->
+    <!--        app:menu="@menu/menu_bottom_app_bar"-->
+    <!--         />-->
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

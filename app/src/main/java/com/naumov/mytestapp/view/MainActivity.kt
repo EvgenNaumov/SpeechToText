@@ -77,19 +77,26 @@ class MainActivity : AppCompatActivity() {
 
         App.instanceNet.setRegisterStatusNetwork()
 
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.action_load_save, IndicatorFragment.getInstant(), "fragment_indicator")
-            .commitNow()
+//        supportFragmentManager.beginTransaction()
+//            .replace(R.id.action_load_save, IndicatorFragment.getInstant(), "fragment_indicator")
+//            .commitNow()
 
 
+        initBottomApp()
         initialViewModel()
         initFabButton()
         initGestureDetector()
 
-        logDebug(TAG, "FAB ${binding.fab.isActivated}")
-        showSaveFile(recordActive)
     }
 
+    private fun initBottomApp() {
+
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        return super.onPrepareOptionsMenu(menu)
+        menuInflater.inflate(R.menu.menu_bottom_app_bar,menu)
+    }
 
     private fun initGestureDetector() {
 
@@ -233,13 +240,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showSaveFile(isLoading:Boolean) {
-        if (isLoading){
-            binding.layoutActionLoadSave.visibility = View.VISIBLE
-    } else
-        {
-            binding.layoutActionLoadSave.visibility = View.GONE
-        }
-//        binding.saveFileIndicator.linearProgressIndicator.visibility = View.VISIBLE
+        binding.contentProgressBarSaveFile.progressBar.visibility = if (isLoading){View.VISIBLE} else {View.GONE}
     }
 
     private fun hideSaveFile() {
