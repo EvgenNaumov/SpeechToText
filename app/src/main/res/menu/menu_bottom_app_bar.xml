@@ -4,10 +4,13 @@
 
     <item
         android:id="@+id/Item_menu1"
-        android:title="Item_menu1"
-        app:showAsAction="always"/>
+        app:showAsAction="always"
+        android:icon="@android:drawable/stat_notify_voicemail"
+        android:title="voicemail"
+        />
     <item
         android:id="@+id/Item_menu2"
-        android:title="Item_menu2"
-        app:showAsAction="always"/>
+        app:showAsAction="always"
+        android:icon="@android:drawable/sym_action_email"
+        android:title="email" />
 </menu>

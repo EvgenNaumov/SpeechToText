@@ -40,24 +40,24 @@
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="16dp"
         android:contentDescription="@string/save_audio_file"
+        app:layout_behavior=".utils.Behavior_FloatingActionButton"
         android:longClickable="true"
-        app:layout_anchor="@id/layout_sheet_result"
-        app:layout_anchorGravity="end|top|center_vertical"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        app:layout_anchor="@+id/bottom_app_bar"
+        app:srcCompat="@drawable/ic_action_voice" />
 
 
-    <!--    <com.google.android.material.bottomappbar.BottomAppBar-->
-    <!--        android:id="@+id/bottom_app_bar"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_gravity="bottom"-->
-    <!--        app:backgroundTint="?colorPrimary"-->
-    <!--        app:fabAlignmentMode="center"-->
-    <!--        app:menu="@menu/menu_bottom_app_bar"-->
-    <!--         />-->
+        <com.google.android.material.bottomappbar.BottomAppBar
+            android:id="@+id/bottom_app_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            app:backgroundTint="?colorPrimary"
+            app:menu="@menu/menu_bottom_app_bar"
+            app:fabAlignmentMode="center"
+            app:hideOnScroll="true"
+             />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

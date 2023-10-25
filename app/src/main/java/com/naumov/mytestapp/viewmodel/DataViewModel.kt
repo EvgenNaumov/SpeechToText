@@ -53,7 +53,7 @@ class DataViewModel(private val translateSpeechToText: TranslateSpeechToText = T
                 .collect { _mutabelData.postValue(ViewStateData.Success(SpeechData(it))) }
         }
 
-    fun onPressButtonRecord(): Boolean {
+    fun transcribationFile(): Boolean {
 
         getTranslate()
         return true

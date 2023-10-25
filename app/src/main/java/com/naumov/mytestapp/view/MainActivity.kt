@@ -3,24 +3,23 @@ package com.naumov.mytestapp.view
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
-import android.opengl.Visibility
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import android.view.GestureDetector.OnGestureListener
-import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.View.OnLongClickListener
+import android.view.ViewGroup.LayoutParams
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.withCreated
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import com.naumov.mytestapp.App
 import com.naumov.mytestapp.R
 import com.naumov.mytestapp.common.media.AudioRecord
@@ -28,16 +27,13 @@ import com.naumov.mytestapp.core.CheckPermissionDescription
 import com.naumov.mytestapp.databinding.ActivityMainBinding
 import com.naumov.mytestapp.model.ViewStateData
 import com.naumov.mytestapp.network.ManagerNetworkConnect
-import com.naumov.mytestapp.utils.DEBUG_ON
 import com.naumov.mytestapp.utils.TAG
 import com.naumov.mytestapp.utils.getAlertDialog
 import com.naumov.mytestapp.utils.logDebug
 import com.naumov.mytestapp.viewmodel.DataViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancelChildren
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.launch
 import kotlin.concurrent.thread
-import kotlin.coroutines.coroutineContext
+import kotlin.math.log
 
 class MainActivity : AppCompatActivity() {
 
@@ -56,6 +52,8 @@ class MainActivity : AppCompatActivity() {
             logDebug(TAG, "FAB is active")
         }
     }
+
+    var showFab:Boolean=true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,14 +80,82 @@ class MainActivity : AppCompatActivity() {
 //            .commitNow()
 
 
+
         initBottomApp()
         initialViewModel()
         initFabButton()
-        initGestureDetector()
+        initBottomSheet()
 
     }
 
+    private fun initBottomSheet() {
+        binding.layoutSheetResult.buttonSave.setOnClickListener {
+            Toast.makeText(this.applicationContext, "save result to base", Toast.LENGTH_SHORT).show()
+            downstairsBottomSheet()
+        }
+
+        binding.layoutSheetResult.buttonCancel.setOnClickListener {
+            Toast.makeText(this.applicationContext, "cancel to save", Toast.LENGTH_SHORT).show()
+            downstairsBottomSheet()
+        }
+
+        val bottomSheetBehavior = BottomSheetBehavior.from(binding.layoutSheetResult.bottomSheetContainer)
+        bottomSheetBehavior.isFitToContents = false
+        bottomSheetBehavior.addBottomSheetCallback(object :
+            BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                logDebug("bottomSheetBehavior onStateChanged:", newState.toString())
+                when (newState) {
+                    BottomSheetBehavior.STATE_DRAGGING -> {
+                       //binding.fab.hide()
+                    }
+                    BottomSheetBehavior.STATE_COLLAPSED -> {
+                        //binding.fab.show()
+                    }
+                    BottomSheetBehavior.STATE_EXPANDED -> {}
+                    BottomSheetBehavior.STATE_HALF_EXPANDED -> {}
+                    BottomSheetBehavior.STATE_HIDDEN -> {}
+                    BottomSheetBehavior.STATE_SETTLING -> {}
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                logDebug("bottomSheetBehavior onSlide:", slideOffset.toString())
+
+//                binding.fab.scaleX=1-slideOffset
+//
+//                if (1-slideOffset==0.0f){
+//                    binding.fab.hide()
+//                    showFab = false
+//                }
+//                if(1-slideOffset!=0.0f || !showFab)
+//                {
+//                    binding.fab.show()
+//                    showFab=true
+//                }
+
+
+            }
+
+        })
+    }
+
+    private fun upstairBottomSheet(){
+
+        val bottomSheetBehavior = BottomSheetBehavior.from(binding.layoutSheetResult.bottomSheetContainer)
+        bottomSheetBehavior.isFitToContents = true
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
+    }
+
+    private fun downstairsBottomSheet(){
+
+        val bottomSheetBehavior = BottomSheetBehavior.from(binding.layoutSheetResult.bottomSheetContainer)
+        bottomSheetBehavior.isFitToContents = false
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+    }
+
     private fun initBottomApp() {
+
 
     }
 
@@ -98,48 +164,9 @@ class MainActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.menu_bottom_app_bar,menu)
     }
 
-    private fun initGestureDetector() {
-
-        gestureDetector = GestureDetector(this, object : OnGestureListener {
-            override fun onDown(e: MotionEvent): Boolean {
-                TODO("Not yet implemented")
-            }
-
-            override fun onSingleTapUp(e: MotionEvent): Boolean {
-                TODO("Not yet implemented")
-            }
-
-            override fun onScroll(
-                e1: MotionEvent,
-                e2: MotionEvent,
-                distanceX: Float,
-                distanceY: Float
-            ): Boolean {
-                TODO("Not yet implemented")
-            }
-
-            override fun onFling(
-                e1: MotionEvent,
-                e2: MotionEvent,
-                velocityX: Float,
-                velocityY: Float
-            ): Boolean {
-                TODO("Not yet implemented")
-            }
-
-            override fun onShowPress(e: MotionEvent) {
-                TODO("Not yet implemented")
-            }
-
-            override fun onLongPress(e: MotionEvent) {
-                logDebug(TAG, "MotionEvent long press FAB: onLongPress ")
-            }
-
-        })
-    }
-
     @SuppressLint("ClickableViewAccessibility")
     private fun initFabButton() {
+
 
         binding.fab.setOnClickListener {
             logDebug(TAG, "short press FAB")
@@ -155,6 +182,11 @@ class MainActivity : AppCompatActivity() {
 
                 showSaveFile(recordActive)
 
+//                binding.fab.hide()
+                upstairBottomSheet()
+
+
+
             }
 
             if (event.action == MotionEvent.ACTION_UP) {
@@ -166,8 +198,8 @@ class MainActivity : AppCompatActivity() {
                 if (!successRecord){
                     return@setOnTouchListener false
                 }
-
-
+                transcribFile()
+//                binding.fab.show()
 
             }
             return@setOnTouchListener false
@@ -203,6 +235,10 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    private fun transcribFile() {
+        lifecycleScope.launch { viewModel.transcribationFile() }
+    }
+
 
     private fun initialViewModel() {
         val model: DataViewModel by lazy { ViewModelProvider(this)[DataViewModel::class.java] }
@@ -220,6 +256,7 @@ class MainActivity : AppCompatActivity() {
                 logDebug("renderData", "Success")
                 showLoading(false)
                 showMessBox(dataTranslate.resultSpeech?._result)
+                binding.layoutSheetResult.resultTranscrib.text = dataTranslate.resultSpeech?._result
             }
 
             is ViewStateData.ErrorService -> {
