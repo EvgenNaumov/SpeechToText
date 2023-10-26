@@ -19,3 +19,4 @@ const val MAX_LENGTH_AUDIO_FILES_SEC = 30
 const val MAX_QUANTITY_AUDIO_CANAL = 1
 
 const val BASE_URL = "https://stt.api.cloud.yandex.net"
+
