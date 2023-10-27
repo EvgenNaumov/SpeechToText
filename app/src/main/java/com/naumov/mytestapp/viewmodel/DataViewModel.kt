@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel
 import com.naumov.mytestapp.common.media.AudioRecord
 import com.naumov.mytestapp.model.SpeechData
 import com.naumov.mytestapp.model.ViewStateData
+import com.naumov.mytestapp.repository.Interactor
+import com.naumov.mytestapp.repository.MainInteractor
 import com.naumov.mytestapp.repository.TranslateSpeechToText
 import com.naumov.mytestapp.repository.TranslateSpeechToTextImpl
 import kotlinx.coroutines.*
@@ -14,7 +16,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import java.io.File
 
-class DataViewModel(private val translateSpeechToText: TranslateSpeechToText = TranslateSpeechToTextImpl()) :
+class DataViewModel(private val translateSpeechToText: Interactor = MainInteractor()) :
     ViewModel() {
 
     private val errorMakeAudio = { }
@@ -49,7 +51,7 @@ class DataViewModel(private val translateSpeechToText: TranslateSpeechToText = T
     suspend fun startInteractor() =
         withContext(Dispatchers.IO) {
 
-            translateSpeechToText.getFakeText()
+            translateSpeechToText.getData(MainInteractor.TYPE_fromFake, null)
                 .collect { _mutabelData.postValue(ViewStateData.Success(SpeechData(it))) }
         }
 

@@ -16,7 +16,7 @@ class MainInteractor(val repo:TranslateSpeechToText = TranslateSpeechToTextImpl(
     override val fromFake: Int
         get() = 5
 
-    override suspend fun getData(fileAudio: File, typeGetData: Int): Flow<String> {
+    override suspend fun getData(typeGetData: Int,  fileAudio: File?): Flow<String> {
         when(typeGetData){
             fromFlow->{return repo.getTextFromSpeechOutFlow()}
             fromFile->{return repo.getTextFromSpeechAudioFile(fileAudio)}
@@ -25,5 +25,15 @@ class MainInteractor(val repo:TranslateSpeechToText = TranslateSpeechToTextImpl(
             fromFake->{return repo.getFakeText()}
             else ->return flow { emit("") }
         }
+    }
+
+    companion object{
+
+        const val TYPE_fromFlow = 1
+        const val TYPE_fromFile = 2
+        const val TYPE_fromFileSynch = 3
+        const val TYPE_fromFileAsynch = 4
+        const val TYPE_fromFake = 5
+
     }
 }

@@ -10,5 +10,5 @@ interface Interactor {
     val fromFileSynch:Int
     val fromFileAsynch:Int
     val fromFake:Int
-    suspend fun getData(fileAudio: File, typeGetData:Int): Flow<String>
+    suspend fun getData(typeGetData:Int, fileAudio: File?): Flow<String>
 }

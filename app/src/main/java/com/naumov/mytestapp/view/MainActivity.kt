@@ -12,6 +12,7 @@ import android.widget.Toast.LENGTH_SHORT
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
+import androidx.lifecycle.ReportFragment.Companion.reportFragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
@@ -88,9 +89,13 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+
     private fun initBottomSheet() {
+        binding.layoutSheetResult.root.setBackgroundResource(R.drawable.round_korner)
+
         binding.layoutSheetResult.buttonSave.setOnClickListener {
             Toast.makeText(this.applicationContext, "save result to base", Toast.LENGTH_SHORT).show()
+            binding.layoutSheetResult.resultTranscrib.text=""
             downstairsBottomSheet()
         }
 
@@ -99,18 +104,27 @@ class MainActivity : AppCompatActivity() {
             downstairsBottomSheet()
         }
 
+        binding.layoutSheetResult.closeView.setOnClickListener {
+            downstairsBottomSheet()
+        }
+
+        var moveUp:Boolean = false
+
         val bottomSheetBehavior = BottomSheetBehavior.from(binding.layoutSheetResult.bottomSheetContainer)
-        bottomSheetBehavior.isFitToContents = false
         bottomSheetBehavior.addBottomSheetCallback(object :
             BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 logDebug("bottomSheetBehavior onStateChanged:", newState.toString())
                 when (newState) {
                     BottomSheetBehavior.STATE_DRAGGING -> {
-                       //binding.fab.hide()
+
+                        moveUp = true
+                        logDebug("bottomSheetBehavior onSlide:", moveUp.toString())
                     }
                     BottomSheetBehavior.STATE_COLLAPSED -> {
-                        //binding.fab.show()
+
+                        moveUp = false
+                        logDebug("bottomSheetBehavior onSlide:",moveUp.toString())
                     }
                     BottomSheetBehavior.STATE_EXPANDED -> {}
                     BottomSheetBehavior.STATE_HALF_EXPANDED -> {}
@@ -122,6 +136,11 @@ class MainActivity : AppCompatActivity() {
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
                 logDebug("bottomSheetBehavior onSlide:", slideOffset.toString())
 
+                val l = 100-((binding.toolbar.height/binding.root.height)*100)
+                if (((slideOffset*100).toInt()>=l-15) && moveUp) {
+                    logDebug("moveUp onSlide: ", "stop")
+                    moveUp = !moveUp
+                }
 //                binding.fab.scaleX=1-slideOffset
 //
 //                if (1-slideOffset==0.0f){
@@ -143,14 +162,20 @@ class MainActivity : AppCompatActivity() {
     private fun upstairBottomSheet(){
 
         val bottomSheetBehavior = BottomSheetBehavior.from(binding.layoutSheetResult.bottomSheetContainer)
+        if (bottomSheetBehavior.state==BottomSheetBehavior.STATE_HALF_EXPANDED) {
+            return
+        }
         bottomSheetBehavior.isFitToContents = true
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
+        bottomSheetBehavior.halfExpandedRatio = 0.5f
+        bottomSheetBehavior.state  = BottomSheetBehavior.STATE_HALF_EXPANDED
     }
 
     private fun downstairsBottomSheet(){
 
         val bottomSheetBehavior = BottomSheetBehavior.from(binding.layoutSheetResult.bottomSheetContainer)
-        bottomSheetBehavior.isFitToContents = false
+        if (bottomSheetBehavior.state==BottomSheetBehavior.STATE_COLLAPSED) {
+            return
+        }
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
     }
 
@@ -181,8 +206,6 @@ class MainActivity : AppCompatActivity() {
                 recordActive = true
 
                 showSaveFile(recordActive)
-
-//                binding.fab.hide()
                 upstairBottomSheet()
 
 
@@ -199,8 +222,6 @@ class MainActivity : AppCompatActivity() {
                     return@setOnTouchListener false
                 }
                 transcribFile()
-//                binding.fab.show()
-
             }
             return@setOnTouchListener false
         }
@@ -236,7 +257,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun transcribFile() {
-        lifecycleScope.launch { viewModel.transcribationFile() }
+       lifecycleScope.launch { viewModel.transcribationFile() }
     }
 
 
@@ -278,10 +299,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun showSaveFile(isLoading:Boolean) {
         binding.contentProgressBarSaveFile.progressBar.visibility = if (isLoading){View.VISIBLE} else {View.GONE}
-    }
-
-    private fun hideSaveFile() {
-//        binding.saveFileIndicator.linearProgressIndicator.visibility = View.GONE
     }
 
     private fun showLoading(isLoading: Boolean) {

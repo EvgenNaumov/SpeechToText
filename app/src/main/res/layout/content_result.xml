@@ -5,16 +5,36 @@
     android:id="@+id/bottom_sheet_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/bottom_sheet_behavior"
-    app:layout_collapseMode="parallax"
-    app:behavior_hideable = "false"
-    app:behavior_peekHeight = "120dp"
-    android:background="#D4D4DE"
 
-    >
+
+    app:behavior_hideable="false"
+    app:behavior_peekHeight="105dp"
+
+    app:layout_behavior="@string/bottom_sheet_behavior"
+    app:layout_collapseMode="parallax">
+
+    <!--    android:background="#D4D4DE"-->
     <!--
     app:layout_behavior="@string/bottom_sheet_behavior"
     -->
+    <View
+        android:layout_width="25dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:background="#663b4351"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/close_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:src="@drawable/baseline_close_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/result_title_transcrib"
@@ -26,6 +46,7 @@
         android:text="@string/result_of_transcribation"
         android:textAlignment="center"
         android:textStyle="bold"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"

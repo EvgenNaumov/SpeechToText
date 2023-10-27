@@ -11,19 +11,29 @@ import kotlin.coroutines.coroutineContext
 class TranslateSpeechToTextImpl():TranslateSpeechToText{
 
     override suspend fun getTextFromSpeechOutFlow(): Flow<String> {
-        TODO("Not yet implemented")
+        return getFakeText()
     }
 
-    override suspend fun getTextFromSpeechAudioFile(fileAudio: File): Flow<String> {
-        TODO("Not yet implemented")
+    override suspend fun getTextFromSpeechAudioFile(fileAudio: File?): Flow<String> {
+        if (fileAudio!=null){
+
+        }
+        return getFakeText()
     }
 
-    override suspend fun getTextFromSpeechAudioFileSynch(fileAudio: File): Flow<String> {
-        TODO("Not yet implemented")
+    override suspend fun getTextFromSpeechAudioFileSynch(fileAudio: File?): Flow<String> {
+        if (fileAudio!=null){
+
+        }
+        return getFakeText()
     }
 
-    override suspend fun getTextFromSpeechAudioFileAsynch(fileAudio: File): Flow<String> {
-        TODO("Not yet implemented")
+    override suspend fun getTextFromSpeechAudioFileAsynch(fileAudio: File?): Flow<String> {
+        if (fileAudio!=null){
+
+        }
+
+        return getFakeText()
     }
 
     override suspend fun getFakeText(): Flow<String> {
