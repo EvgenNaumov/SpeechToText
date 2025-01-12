@@ -47,7 +47,6 @@ class MainActivity : AppCompatActivity() {
     private var recordActive: Boolean = false
     private var successRecord = true
 
-    private lateinit var gestureDetector: GestureDetector
     private val tr: Thread = thread(name = "clickFAB") {
         while (recordActive) {
             logDebug(TAG, "FAB is active")

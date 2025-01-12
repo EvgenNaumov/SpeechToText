@@ -5,14 +5,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintSet.Layout
 import androidx.navigation.fragment.findNavController
 import com.naumov.mytestapp.R
+import com.naumov.mytestapp.core.BaseFragment
+import com.naumov.mytestapp.core.BaseViewModel
 import com.naumov.mytestapp.databinding.FragmentFirstBinding
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
-class FirstFragment : Fragment() {
+class FirstFragment :BaseFragment<BaseViewModel, FragmentFirstBinding>(R.layout.fragment_first) {
 
     private var _binding: FragmentFirstBinding? = null
 
